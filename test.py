@@ -61,6 +61,9 @@ df_label_job1=pd.read_csv(label_job1_path)
 
 group_c2=df_c2.groupby('seriesuid').count()
 group_anno=df_annos.groupby('seriesuid').count()
+diameter=df_annos['diameter_mm']
+diameter.plot.hist(bins=30)
+
 
 patients_id=list(group_c2.index)
 #for i in range(len(patients_id)):

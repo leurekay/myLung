@@ -43,7 +43,7 @@ def res_block(x,conv_filters,pool_size,pool_strides):
 def n_net():
     
 
-    input_img = Input(shape=(128,128,128,3))
+    input_img = Input(shape=(128,128,128,1))
     
     #first 2 conv layers
     x = Conv3D(24, (3, 3,3), padding='same', activation='relu')(input_img)
