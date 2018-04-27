@@ -148,6 +148,8 @@ def generate_feeddata():
     patch_box=np.array(patch_box)
     patch_box=np.expand_dims(patch_box,axis=-1)
     groundtruth_box=np.array(groundtruth_box) 
+    np.save(os.path.join(patch_save_dir,'patches.npy'),patch_box)
+    np.save(os.path.join(patch_save_dir,'groundtruthes.npy'),groundtruth_box)
     return patch_box,groundtruth_box
 
 
