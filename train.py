@@ -43,19 +43,19 @@ def myloss(y_true, y_pred):
     y_pos_pred=tf.boolean_mask(y_pred,mask_pos)
     y_neg_pred=tf.boolean_mask(y_pred,mask_neg)
     
-#    box_true=[]
-#    box_pred=[]
-#    for i in range(2):
-#        rand=np.random.randint(0,32*2)
-#        slice_true=y_neg_true[rand]
-#        box_true.append(tf.reshape(slice_true,[1,5]))
-#        slice_pred=y_neg_pred[rand]
-#        box_pred.append(tf.reshape(slice_pred,[1,5]))
-#    y_neg_true=tf.concat(box_true,axis=0)
-#    y_neg_pred=tf.concat(box_pred,axis=0)
+    box_true=[]
+    box_pred=[]
+    for i in range(2):
+        rand=np.random.randint(0,32*2)
+        slice_true=y_neg_true[rand]
+        box_true.append(tf.reshape(slice_true,[1,5]))
+        slice_pred=y_neg_pred[rand]
+        box_pred.append(tf.reshape(slice_pred,[1,5]))
+    y_neg_true=tf.concat(box_true,axis=0)
+    y_neg_pred=tf.concat(box_pred,axis=0)
     
-    y_neg_true=y_neg_true[:30]
-    y_neg_pred=y_neg_pred[:30]
+#    y_neg_true=y_neg_true[:30]
+#    y_neg_pred=y_neg_pred[:30]
     
     y_true=tf.concat((y_pos_true,y_neg_true),axis=0)
     y_pred=tf.concat((y_pos_pred,y_neg_pred),axis=0)
