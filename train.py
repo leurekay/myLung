@@ -82,7 +82,10 @@ def myloss(y_true, y_pred):
 def myloss2():
     pass
 
-model.compile(optimizer='adam',
+
+adam=keras.optimizers.Adam(lr=0.0001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
+
+model.compile(optimizer=adam,
               loss=myloss,)
 
 
