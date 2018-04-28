@@ -135,7 +135,7 @@ def generate_feeddata():
     groundtruth_box=[]
     for i,index in enumerate(id_list):
         if i%10==0:
-            print i
+            print (i)
         path_ct=os.path.join(luna_dir,index+'_clean.npy')
         path_label=os.path.join(luna_dir,index+'_label.npy')
         img3d=np.load(path_ct)[0]
