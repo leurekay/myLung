@@ -30,7 +30,7 @@ X=np.load(patch_save_path)
 X=X.astype('float32')
 y=np.load(groundtruth_save_path)
 
-model=n_net2()
+model=n_net()
 
 
 
