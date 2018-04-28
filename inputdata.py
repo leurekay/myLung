@@ -110,7 +110,8 @@ def groundtruth_of_anchor(anno):
  
 
 def generate_feeddata():
-    luna_dir='/data/lungCT/luna/temp/luna_small'
+#    luna_dir='/data/lungCT/luna/temp/luna_small'
+    luna_dir='/data/lungCT/luna/temp/luna_npy'
     
     patch_save_dir='/data/lungCT/luna/temp/patch'
     if not os.path.exists(patch_save_dir):
