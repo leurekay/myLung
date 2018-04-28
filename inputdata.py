@@ -111,7 +111,7 @@ def groundtruth_of_anchor(anno):
 
 def generate_feeddata():
 #    luna_dir='/data/lungCT/luna/temp/luna_small'
-    luna_dir='/data/lungCT/luna/temp/luna_npy'
+    luna_dir='/data/lungCT/luna/temp/luna_npy/small'
     
     patch_save_dir='/data/lungCT/luna/temp/patch'
     if not os.path.exists(patch_save_dir):
@@ -133,7 +133,9 @@ def generate_feeddata():
     
     patch_box=[]
     groundtruth_box=[]
-    for index in id_list:
+    for i,index in enumerate(id_list):
+        if i%10==0:
+            print i
         path_ct=os.path.join(luna_dir,index+'_clean.npy')
         path_label=os.path.join(luna_dir,index+'_label.npy')
         img3d=np.load(path_ct)[0]
