@@ -23,12 +23,15 @@ import pandas as pd
 
 patch_save_path='/data/lungCT/luna/temp/patch/patches.npy'
 groundtruth_save_path='/data/lungCT/luna/temp/patch/groundtruthes.npy'
-
+RATIO_TRAIN=0.9
 
 #X,y=inputdata.generate_feeddata()
 X=np.load(patch_save_path)
 X=X.astype('float32')
 y=np.load(groundtruth_save_path)
+nsamples=y.shape[0]
+cut_point=int(nsamples*RATIO_TRAIN)
+X_train,X_val,y_train,y_val=X[:cut_point],X[cut_point:],y[:cut_point],y[cut_point:]
 
 model=n_net()
 
@@ -86,5 +89,6 @@ model.compile(optimizer=adam,
               loss=myloss,)
 
 
-model.fit(X,y,
-          batch_size=1,epochs=10,)
+model.fit(X_train,y_train,
+          batch_size=1,epochs=10,
+          validation_data=(X_val,y_val),)
