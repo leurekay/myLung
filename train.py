@@ -62,8 +62,8 @@ def myloss(y_true, y_pred):
     
     y_true=tf.concat((y_pos_true,y_neg_true),axis=0)
     y_pred=tf.concat((y_pos_pred,y_neg_pred),axis=0)
-    
-    loss_cls=tf.losses.log_loss(y_true[:,0],y_pred[:,0])
+    y_pred_sigmoid=tf.sigmoid(y_pred[:,0])
+    loss_cls=tf.losses.log_loss(y_true[:,0],y_pred_sigmoid)
     #loss_cls2=tf.reduce_mean(y_true[:,0]*tf.log(y_pred[:,0])+(1-y_true[:,0])*tf.log(1-y_pred[:,0]))
     
     def smoothL1(x,y):
