@@ -46,7 +46,7 @@ def myloss(y_true, y_pred):
     box_true=[]
     box_pred=[]
     for i in range(2):
-        rand=np.random.randint(0,32*32*32*2)
+        rand=np.random.randint(0,32*2)
         slice_true=y_neg_true[rand]
         box_true.append(tf.reshape(slice_true,[1,5]))
         slice_pred=y_neg_pred[rand]
