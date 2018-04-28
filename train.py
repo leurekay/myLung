@@ -46,7 +46,7 @@ def myloss(y_true, y_pred):
     box_true=[]
     box_pred=[]
     for i in range(2):
-        rand=np.random.randint(0,32*2)
+        rand=np.random.randint(0,32*32*32*1)
         slice_true=y_neg_true[rand]
         box_true.append(tf.reshape(slice_true,[1,5]))
         slice_pred=y_neg_pred[rand]
@@ -79,11 +79,8 @@ def myloss(y_true, y_pred):
     return loss
 
 
-def myloss2():
-    pass
 
-
-adam=keras.optimizers.Adam(lr=0.0001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
+adam=keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 
 model.compile(optimizer=adam,
               loss=myloss,)
