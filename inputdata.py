@@ -82,7 +82,7 @@ def groundtruth_of_anchor(anno):
     map_size=[32,32,32]
     block_size=4
     rpn_scale=[5,10,20]
-    threshold_up=0.5
+    threshold_up=0.4
     threshold_low=0.02
     interval_point=np.array([2+i*4 for i in range(32)])
 
@@ -95,6 +95,7 @@ def groundtruth_of_anchor(anno):
                     anchor=np.array([Ax,Ay,Az,Ar])
                     iou=IoU(anchor,anno)
                     if iou>threshold_up:
+#                        print (iou)
                         dx=(anno[0]-Ax)/float(Ar)
                         dy=(anno[1]-Ay)/float(Ar)
                         dz=(anno[2]-Az)/float(Ar)
@@ -139,6 +140,7 @@ def generate_feeddata():
         if int(sum(sum(label)))==0:#indicate no nodule
             patch=cropPatch_by_random(img3d,[128,128,128])
             groundtruth=np.zeros([32,32,32,3,5],'int16')
+#            print (index)
         else:
             patch,anno=cropPatch_by_nodule(img3d,label[np.random.randint(len(label))])
             groundtruth=groundtruth_of_anchor(anno)
@@ -157,45 +159,36 @@ if __name__=='__main__':
     X,y=generate_feeddata()
     
     
-    """
-    luna_dir='/data/lungCT/luna/temp/luna_small'
+ 
+#    luna_dir='/data/lungCT/luna/temp/luna_small'
+#    
+#    patch_save_dir='/data/lungCT/luna/temp/patch'
+#    if not os.path.exists(patch_save_dir):
+#        os.makedirs(patch_save_dir)
+#
+#    patient_list=os.listdir(luna_dir)
+#    
+#    ct_list=filter(lambda x:x.split('_')[-1]=='clean.npy',patient_list)
+#    label_list=filter(lambda x:x.split('_')[-1]=='label.npy',patient_list)
+#    
+#    id_list_by_ct=map(lambda x:x.split('_')[0],ct_list)
+#    id_list_by_label=map(lambda x:x.split('_')[0],label_list)
+#
+#    id_list=set.intersection(set(id_list_by_ct),set(id_list_by_label))
+#    id_list=list(id_list)    
+#    
+#    img3d_box=[]
+#    label_box=[]
+#    
+#    patch_box=[]
+#    groundtruth_box=[]
+#    for index in id_list:
+#        path_ct=os.path.join(luna_dir,index+'_clean.npy')
+#        path_label=os.path.join(luna_dir,index+'_label.npy')
+#        img3d=np.load(path_ct)[0]
+#        label=np.load(path_label)
+#        patch_box.append(img3d)
+#        label_box.append(label)
     
-    patch_save_dir='/data/lungCT/luna/temp/patch'
-    if not os.path.exists(patch_save_dir):
-        os.makedirs(patch_save_dir)
-
-    patient_list=os.listdir(luna_dir)
-    
-    ct_list=filter(lambda x:x.split('_')[-1]=='clean.npy',patient_list)
-    label_list=filter(lambda x:x.split('_')[-1]=='label.npy',patient_list)
-    
-    id_list_by_ct=map(lambda x:x.split('_')[0],ct_list)
-    id_list_by_label=map(lambda x:x.split('_')[0],label_list)
-
-    id_list=set.intersection(set(id_list_by_ct),set(id_list_by_label))
-    id_list=list(id_list)    
-    
-    img3d_box=[]
-    label_box=[]
-    
-    patch_box=[]
-    groundtruth_box=[]
-    for index in id_list:
-        path_ct=os.path.join(luna_dir,index+'_clean.npy')
-        path_label=os.path.join(luna_dir,index+'_label.npy')
-        img3d=np.load(path_ct)[0]
-        label=np.load(path_label)
-        if int(sum(sum(label)))==0:#indicate no nodule
-            patch=cropPatch_by_random(img3d,[128,128,128])
-            groundtruth=np.zeros([32,32,32,3,5],'int16')
-        else:
-            patch,anno=cropPatch_by_nodule(img3d,label[np.random.randint(len(label))])
-            groundtruth=groundtruth_of_anchor(anno)
-        patch_box.append(patch)
-        groundtruth_box.append(groundtruth)
-        
-    patch_box=np.array(patch_box)
-    groundtruth_box=np.array(groundtruth_box)
-    """   
             
 

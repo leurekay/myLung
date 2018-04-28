@@ -78,8 +78,28 @@ def n_net():
     model=Model(inputs=input_img,outputs=x )
     return model
 
+def n_net2():
+    
+
+    input_img = Input(shape=(128,128,128,1,))
+    
+    #first 2 conv layers
+    x = Conv3D(24, (3, 3,3), padding='same', activation='relu')(input_img)
+    x = Conv3D(24, (3, 3,3), strides=(1,1,1),padding='same', activation='relu')(x)
+    x = Conv3D(15 ,(4, 4,4), strides=(4,4,4),padding='same', activation='relu')(x)
+    
+    
+    
+
+    x= Reshape((32,32,32,3,5))(x)
+    
+    #predictions = Dense(10, activation='softmax')(x)
+    model=Model(inputs=input_img,outputs=x )
+    return model
+
+
 if __name__=='__main__':
-    model=n_net()
+    model=n_net2()
 
     model.summary()
     
