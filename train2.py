@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Thu May  3 14:20:17 2018
+
+@author: ly
+"""
+
+import inputdata
+import data
+from model_3D import *
+import layers
+
+import os
+from PIL import Image
+import tensorflow as tf
+
+
+import keras
+import keras.backend as K
+
+
+import numpy as np
+import pandas as pd
+
+
+config = {}
+config['anchors'] = [ 5.0, 10.0, 20.]
+config['chanel'] = 1
+config['crop_size'] = [128, 128, 128]
+config['stride'] = 4
+config['max_stride'] = 16
+config['num_neg'] = 800
+config['th_neg'] = 0.02
+config['th_pos_train'] = 0.5
+config['th_pos_val'] = 1
+config['num_hard'] = 2
+config['bound_size'] = 12
+config['reso'] = 1
+config['sizelim'] = 6. #mm
+config['sizelim2'] = 30
+config['sizelim3'] = 40
+config['aug_scale'] = True
+config['r_rand_crop'] = 0.3
+config['pad_value'] = 170
+config['augtype'] = {'flip':True,'swap':False,'scale':True,'rotate':False}
+config['blacklist'] = ['868b024d9fa388b7ddab12ec1c06af38','990fbe3f0a1b53878669967b9afd1441','adc3bbc63d40f8761c59be10f1e504c3']
+
+
+
+
+data_dir='/data/lungCT/luna/temp/luna_npy'
+dataset=data.DataBowl3Detector(data_dir,config)
+patch,label,coord=dataset.__getitem__(295)
+a=label[:,:,:,:,0]
+
+#def iter_data(data_dir):
+#     dataset=data.DataBowl3Detector(data_dir,config)
+#     for i in range(10000):
+#         yield dataset.__getitem__(i)
+# 
+#data_iterator=iter_data(data_dir)
+# 
+#for i in data_iterator:
+#    print (i[0][0][50][50][50])
+
+
+
+
+model=n_net2()
+myloss=layers.myloss
+
+adam=keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
+
+model.compile(optimizer=adam,
+              loss=myloss,)
+
+def generate_arrays():
+    dataset=data.DataBowl3Detector(data_dir,config)
+    for i in range(200):
+        x, y ,_ = dataset.__getitem__(i)
+        x=np.expand_dims(x,axis=-1)
+        y=np.expand_dims(y,axis=0)
+        yield (x, y)
+
+model.fit_generator(generate_arrays(),
+        samples_per_epoch=200, epochs=10)
+
