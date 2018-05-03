@@ -49,6 +49,8 @@ config['blacklist'] = ['868b024d9fa388b7ddab12ec1c06af38','990fbe3f0a1b538786699
 
 
 
+
+
 data_dir='/data/lungCT/luna/temp/luna_npy'
 dataset=data.DataBowl3Detector(data_dir,config)
 patch,label,coord=dataset.__getitem__(295)
@@ -67,7 +69,7 @@ a=label[:,:,:,:,0]
 
 
 
-model=n_net2()
+model=n_net()
 myloss=layers.myloss
 
 adam=keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
