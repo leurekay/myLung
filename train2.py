@@ -93,7 +93,7 @@ def generate_arrays(phase):
 
 model.fit_generator(generate_arrays(phase='train'),
                     steps_per_epoch=100,epochs=10,
-                    verbose=2,callbacks=None,
+                    verbose=1,callbacks=None,
                     validation_data=generate_arrays('val'),
                     validation_steps=50,
                     workers=4,use_multiprocessing=True)
