@@ -107,6 +107,7 @@ class LossHistory(keras.callbacks.Callback):
 
     def on_epoch_end(self, epoch, logs={}):
         self.losses.append(logs.get('loss'))
+        print ('epoch:',epoch,'    ',self.losses)
 history = LossHistory()
 
 def generate_arrays(phase):
