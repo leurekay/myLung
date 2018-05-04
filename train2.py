@@ -54,6 +54,9 @@ config['train_over_total']=0.9
 
 data_dir='/data/lungCT/luna/temp/luna_npy'
 SAVED_MODEL='/data/lungCT/luna/temp/model/my_model.h5'
+
+        
+        
 dataset=data.DataBowl3Detector(data_dir,config)
 patch,label,coord=dataset.__getitem__(295)
 a=label[:,:,:,:,0]
@@ -69,6 +72,7 @@ a=label[:,:,:,:,0]
 #for count,i in  enumerate(data_iterator):
 #    box.append(i[0][0][50][50][50])
 #    print (count)
+
 
 
 #loss function
@@ -107,10 +111,12 @@ def generate_arrays(phase):
             yield (x, y)
 
 model.fit_generator(generate_arrays(phase='train'),
-                    steps_per_epoch=train_samples,epochs=10,
+                    steps_per_epoch=train_samples,epochs=1,
                     verbose=1,callbacks=None,
                     validation_data=generate_arrays('val'),
                     validation_steps=val_samples,
                     workers=4,)
-
+model_dir=SAVED_MODEL.split(SAVED_MODEL.split('/')[-1])[0]
+if os.path.exists(model_dir):
+    os.makedirs(model_dir)
 model.save(SAVED_MODEL)
