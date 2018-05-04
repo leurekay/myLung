@@ -117,6 +117,6 @@ model.fit_generator(generate_arrays(phase='train'),
                     validation_steps=val_samples,
                     workers=4,)
 model_dir=SAVED_MODEL.split(SAVED_MODEL.split('/')[-1])[0]
-if os.path.exists(model_dir):
+if not os.path.exists(model_dir):
     os.makedirs(model_dir)
 model.save(SAVED_MODEL)
