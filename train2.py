@@ -110,3 +110,5 @@ model.fit_generator(generate_arrays(phase='train'),
                     validation_data=generate_arrays('val'),
                     validation_steps=50,
                     workers=4,)
+
+model.save(SAVED_MODEL)
