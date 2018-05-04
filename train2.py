@@ -111,7 +111,7 @@ class LossHistory(keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs={}):
         time_now=int(time.time())
         train_loss=logs.get('loss')
-        val_loss=logs.get('vals_loss')
+        val_loss=logs.get('val_loss')
         self.losses.append([train_loss,val_loss])
         print ('epoch:',epoch,'    ',self.losses)
         file_name=str(time_now)+'_train_%.3f_val_%.3f'%(train_loss,val_loss)
