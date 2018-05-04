@@ -103,7 +103,7 @@ val_samples=val_dataset.__len__()
 
 
 
-class LossHistory(keras.callbacks.Callback):
+class EpochSave(keras.callbacks.Callback):
     def on_epoch_begin(self,epoch, logs={}):
         self.losses = []
         
@@ -113,10 +113,10 @@ class LossHistory(keras.callbacks.Callback):
         train_loss=logs.get('loss')
         val_loss=logs.get('val_loss')
         self.losses.append([train_loss,val_loss])
-        print ('epoch:',epoch,'    ',self.losses)
-        file_name=str(time_now)+'_train_%.3f_val_%.3f'%(train_loss,val_loss)
+#        print ('epoch:',epoch,'    ',self.losses)
+        file_name=str(time_now)+'_train_%.3f_val_%.3f.h5'%(train_loss,val_loss)
         model.save(os.path.join(model_dir,file_name),include_optimizer=False)
-history = LossHistory()
+epoch_save = EpochSave()
 
 def generate_arrays(phase):
     dataset=data.DataBowl3Detector(data_dir,config,phase=phase)
@@ -130,7 +130,7 @@ def generate_arrays(phase):
 
 model.fit_generator(generate_arrays(phase='train'),
                     steps_per_epoch=train_samples,epochs=3,
-                    verbose=1,callbacks=[history],
+                    verbose=1,callbacks=[epoch_save],
                     validation_data=generate_arrays('val'),
                     validation_steps=val_samples,
                     workers=4,)
