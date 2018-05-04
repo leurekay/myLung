@@ -82,11 +82,12 @@ model.compile(optimizer=adam,
 def generate_arrays(phase):
     dataset=data.DataBowl3Detector(data_dir,config,phase=phase)
     n_samples=dataset.__len__()
-    for i in range(n_samples):
-        x, y ,_ = dataset.__getitem__(i)
-        x=np.expand_dims(x,axis=-1)
-        y=np.expand_dims(y,axis=0)
-        yield (x, y)
+    while True:
+        for i in range(n_samples):
+            x, y ,_ = dataset.__getitem__(i)
+            x=np.expand_dims(x,axis=-1)
+            y=np.expand_dims(y,axis=0)
+            yield (x, y)
 
 model.fit_generator(generate_arrays(phase='val'),
         samples_per_epoch=60, epochs=10)
