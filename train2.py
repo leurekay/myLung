@@ -11,6 +11,8 @@ import data
 from model_3D import *
 import layers
 
+
+import time
 import os
 from PIL import Image
 import tensorflow as tf
@@ -55,7 +57,7 @@ config['train_over_total']=0.9
 data_dir='/data/lungCT/luna/temp/luna_npy'
 SAVED_MODEL='/data/lungCT/luna/temp/model/my_model.h5'
 
-        
+model_dir=SAVED_MODEL.split(SAVED_MODEL.split('/')[-1])[0]        
         
 dataset=data.DataBowl3Detector(data_dir,config)
 patch,label,coord=dataset.__getitem__(295)
@@ -104,10 +106,15 @@ val_samples=val_dataset.__len__()
 class LossHistory(keras.callbacks.Callback):
     def on_epoch_begin(self,epoch, logs={}):
         self.losses = []
+        time=int(time.time())
 
     def on_epoch_end(self, epoch, logs={}):
-        self.losses.append([logs.get('loss'),logs.get('val_loss')])
+        train_loss=logs.get('loss')
+        val_loss=logs.get('vals_loss')
+        self.losses.append([train_loss,val_loss])
         print ('epoch:',epoch,'    ',self.losses)
+        file_name=str(time)+'_train_%.3f_val_%.3f'%(train_loss,val_loss)
+        model.save(os.path.join(model_dir,file_name),include_optimizer=False)
 history = LossHistory()
 
 def generate_arrays(phase):
@@ -126,7 +133,7 @@ model.fit_generator(generate_arrays(phase='train'),
                     validation_data=generate_arrays('val'),
                     validation_steps=val_samples,
                     workers=4,)
-model_dir=SAVED_MODEL.split(SAVED_MODEL.split('/')[-1])[0]
+
 if not os.path.exists(model_dir):
     os.makedirs(model_dir)
 model.save(SAVED_MODEL,include_optimizer=False)
