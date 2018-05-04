@@ -89,5 +89,5 @@ def generate_arrays(phase):
         yield (x, y)
 
 model.fit_generator(generate_arrays(phase='val'),
-        samples_per_epoch=200, epochs=10)
+        samples_per_epoch=60, epochs=10)
 
