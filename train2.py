@@ -96,4 +96,4 @@ model.fit_generator(generate_arrays(phase='train'),
                     verbose=1,callbacks=None,
                     validation_data=generate_arrays('val'),
                     validation_steps=50,
-                    workers=4,use_multiprocessing=True)
+                    workers=4,)
