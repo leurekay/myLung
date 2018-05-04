@@ -48,7 +48,7 @@ config['r_rand_crop'] = 0.3
 config['pad_value'] = 170
 config['augtype'] = {'flip':True,'swap':False,'scale':True,'rotate':False}
 config['blacklist'] = ['868b024d9fa388b7ddab12ec1c06af38','990fbe3f0a1b53878669967b9afd1441','adc3bbc63d40f8761c59be10f1e504c3']
-config['train_over_total']=0.9
+config['train_over_total']=0.8
 
 
 
@@ -106,14 +106,15 @@ val_samples=val_dataset.__len__()
 class LossHistory(keras.callbacks.Callback):
     def on_epoch_begin(self,epoch, logs={}):
         self.losses = []
-        time=int(time.time())
+        
 
     def on_epoch_end(self, epoch, logs={}):
+        time_now=int(time.time())
         train_loss=logs.get('loss')
         val_loss=logs.get('vals_loss')
         self.losses.append([train_loss,val_loss])
         print ('epoch:',epoch,'    ',self.losses)
-        file_name=str(time)+'_train_%.3f_val_%.3f'%(train_loss,val_loss)
+        file_name=str(time_now)+'_train_%.3f_val_%.3f'%(train_loss,val_loss)
         model.save(os.path.join(model_dir,file_name),include_optimizer=False)
 history = LossHistory()
 
