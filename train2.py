@@ -89,6 +89,6 @@ def generate_arrays(phase):
             y=np.expand_dims(y,axis=0)
             yield (x, y)
 
-model.fit_generator(generate_arrays(phase='val'),
-        samples_per_epoch=60, epochs=10)
+model.fit_generator(generate_arrays(phase='train'),
+        samples_per_epoch=200, epochs=10)
 
