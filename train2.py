@@ -59,21 +59,9 @@ SAVED_MODEL='/data/lungCT/luna/temp/model/my_model.h5'
 
 model_dir=SAVED_MODEL.split(SAVED_MODEL.split('/')[-1])[0]        
         
-dataset=data.DataBowl3Detector(data_dir,config)
-patch,label,coord=dataset.__getitem__(295)
-a=label[:,:,:,:,0]
-
-#def iter_data(data_dir):
-#     dataset=data.DataBowl3Detector(data_dir,config)
-#     for i in range(10000):
-#         yield dataset.__getitem__(i)
-# 
-#data_iterator=iter_data(data_dir)
-# 
-#box=[]
-#for count,i in  enumerate(data_iterator):
-#    box.append(i[0][0][50][50][50])
-#    print (count)
+#dataset=data.DataBowl3Detector(data_dir,config)
+#patch,label,coord=dataset.__getitem__(295)
+#a=label[:,:,:,:,0]
 
 
 
@@ -103,6 +91,7 @@ val_samples=val_dataset.__len__()
 
 
 
+#call back.   save model named by (time,train_loss,val_loss)
 class EpochSave(keras.callbacks.Callback):
     def on_epoch_begin(self,epoch, logs={}):
         self.losses = []
@@ -118,6 +107,9 @@ class EpochSave(keras.callbacks.Callback):
         model.save(os.path.join(model_dir,file_name),include_optimizer=False)
 epoch_save = EpochSave()
 
+
+#read data and processing by CPU ,during training.
+#Don't load all data into memory at onece!
 def generate_arrays(phase):
     dataset=data.DataBowl3Detector(data_dir,config,phase=phase)
     n_samples=dataset.__len__()
@@ -128,12 +120,14 @@ def generate_arrays(phase):
             y=np.expand_dims(y,axis=0)
             yield (x, y)
 
+
 model.fit_generator(generate_arrays(phase='train'),
                     steps_per_epoch=train_samples,epochs=3,
                     verbose=1,callbacks=[epoch_save],
                     validation_data=generate_arrays('val'),
                     validation_steps=val_samples,
                     workers=4,)
+
 
 if not os.path.exists(model_dir):
     os.makedirs(model_dir)
