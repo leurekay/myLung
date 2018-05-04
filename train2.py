@@ -102,10 +102,10 @@ val_samples=val_dataset.__len__()
 
 
 class LossHistory(keras.callbacks.Callback):
-    def on_epoch_begin(self, logs={}):
+    def on_epoch_begin(self,epoch, logs={}):
         self.losses = []
 
-    def on_epoch_end(self, batch, logs={}):
+    def on_epoch_end(self, epoch, logs={}):
         self.losses.append(logs.get('loss'))
 history = LossHistory()
 
@@ -120,7 +120,7 @@ def generate_arrays(phase):
             yield (x, y)
 
 model.fit_generator(generate_arrays(phase='train'),
-                    steps_per_epoch=train_samples,epochs=1,
+                    steps_per_epoch=train_samples,epochs=3,
                     verbose=1,callbacks=[history],
                     validation_data=generate_arrays('val'),
                     validation_steps=val_samples,
