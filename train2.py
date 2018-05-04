@@ -18,6 +18,7 @@ import tensorflow as tf
 
 import keras
 import keras.backend as K
+from keras.models import Model,load_model
 
 
 import numpy as np
@@ -52,6 +53,7 @@ config['blacklist'] = ['868b024d9fa388b7ddab12ec1c06af38','990fbe3f0a1b538786699
 
 
 data_dir='/data/lungCT/luna/temp/luna_npy'
+SAVED_MODEL='/data/lungCT/luna/temp/model/my_model.h5'
 dataset=data.DataBowl3Detector(data_dir,config)
 patch,label,coord=dataset.__getitem__(295)
 a=label[:,:,:,:,0]
@@ -69,15 +71,26 @@ a=label[:,:,:,:,0]
 #    print (count)
 
 
-
-
-model=n_net()
+#loss function
 myloss=layers.myloss
 
-adam=keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 
-model.compile(optimizer=adam,
-              loss=myloss,)
+#load model
+if os.path.exists(SAVED_MODEL):
+    print ("*************************\n restore model\n*************************")
+    model=load_model(SAVED_MODEL)  
+else:
+    model=n_net()
+    adam=keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
+    model.compile(optimizer=adam,
+                  loss=myloss,
+                  )
+
+
+
+
+#model.compile(optimizer=adam,
+#              loss=myloss,)
 
 def generate_arrays(phase):
     dataset=data.DataBowl3Detector(data_dir,config,phase=phase)
