@@ -106,7 +106,7 @@ class LossHistory(keras.callbacks.Callback):
         self.losses = []
 
     def on_epoch_end(self, epoch, logs={}):
-        self.losses.append([logs.get('loss'),logs.get('vai_loss')])
+        self.losses.append([logs.get('loss'),logs.get('val_loss')])
         print ('epoch:',epoch,'    ',self.losses)
 history = LossHistory()
 
