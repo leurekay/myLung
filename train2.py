@@ -46,7 +46,7 @@ config['r_rand_crop'] = 0.3
 config['pad_value'] = 170
 config['augtype'] = {'flip':True,'swap':False,'scale':True,'rotate':False}
 config['blacklist'] = ['868b024d9fa388b7ddab12ec1c06af38','990fbe3f0a1b53878669967b9afd1441','adc3bbc63d40f8761c59be10f1e504c3']
-
+config['train_over_total']=0.9
 
 
 
@@ -88,9 +88,13 @@ else:
 
 
 
+# numbers of sample correspoding train and val
+train_dataset=data.DataBowl3Detector(data_dir,config,phase='train')
+train_samples=train_dataset.__len__()
+val_dataset=data.DataBowl3Detector(data_dir,config,phase='val')
+val_samples=val_dataset.__len__()
 
-#model.compile(optimizer=adam,
-#              loss=myloss,)
+
 
 def generate_arrays(phase):
     dataset=data.DataBowl3Detector(data_dir,config,phase=phase)
@@ -102,13 +106,11 @@ def generate_arrays(phase):
             y=np.expand_dims(y,axis=0)
             yield (x, y)
 
-
-
 model.fit_generator(generate_arrays(phase='train'),
-                    steps_per_epoch=100,epochs=10,
+                    steps_per_epoch=train_samples,epochs=10,
                     verbose=1,callbacks=None,
                     validation_data=generate_arrays('val'),
-                    validation_steps=50,
+                    validation_steps=val_samples,
                     workers=4,)
 
 model.save(SAVED_MODEL)

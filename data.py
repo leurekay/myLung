@@ -20,9 +20,8 @@ from scipy.ndimage.interpolation import rotate
 
 
 
-
 config = {}
-config['anchors'] = [ 10.0, 30.0, 60.]
+config['anchors'] = [ 5.0, 10.0, 20.]
 config['chanel'] = 1
 config['crop_size'] = [128, 128, 128]
 config['stride'] = 4
@@ -42,7 +41,7 @@ config['r_rand_crop'] = 0.3
 config['pad_value'] = 170
 config['augtype'] = {'flip':True,'swap':False,'scale':True,'rotate':False}
 config['blacklist'] = ['868b024d9fa388b7ddab12ec1c06af38','990fbe3f0a1b53878669967b9afd1441','adc3bbc63d40f8761c59be10f1e504c3']
-
+config['train_over_total']=0.9
 
 
 
@@ -89,6 +88,7 @@ class DataBowl3Detector():
         self.r_rand = config['r_rand_crop']
         self.augtype = config['augtype']
         self.pad_value = config['pad_value']
+        self.train_over_total=config['train_over_total']
         self.split_comber = split_comber
 #        idcs = np.load(split_path)
 
@@ -110,7 +110,7 @@ class DataBowl3Detector():
             idcs=list(id_list)
 
         
-            split_point=int(len(idcs)*0.9)
+            split_point=int(len(idcs)*self.train_over_total)
             if phase == 'train':
                 idcs=idcs[:split_point]
             if phase == 'val':
