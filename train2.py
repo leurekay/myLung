@@ -63,8 +63,10 @@ a=label[:,:,:,:,0]
 # 
 #data_iterator=iter_data(data_dir)
 # 
-#for i in data_iterator:
-#    print (i[0][0][50][50][50])
+#box=[]
+#for count,i in  enumerate(data_iterator):
+#    box.append(i[0][0][50][50][50])
+#    print (count)
 
 
 
@@ -77,14 +79,15 @@ adam=keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 model.compile(optimizer=adam,
               loss=myloss,)
 
-def generate_arrays():
-    dataset=data.DataBowl3Detector(data_dir,config)
-    for i in range(200):
+def generate_arrays(phase):
+    dataset=data.DataBowl3Detector(data_dir,config,phase=phase)
+    n_samples=dataset.__len__()
+    for i in range(n_samples):
         x, y ,_ = dataset.__getitem__(i)
         x=np.expand_dims(x,axis=-1)
         y=np.expand_dims(y,axis=0)
         yield (x, y)
 
-model.fit_generator(generate_arrays(),
+model.fit_generator(generate_arrays(phase='val'),
         samples_per_epoch=200, epochs=10)
 

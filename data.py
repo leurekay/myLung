@@ -109,7 +109,13 @@ class DataBowl3Detector():
         if phase!='test':
             idcs=list(id_list)
 
-
+        
+            split_point=int(len(idcs)*0.9)
+            if phase == 'train':
+                idcs=idcs[:split_point]
+            if phase == 'val':
+                idcs=idcs[split_point:]
+        
 
         self.filenames = [os.path.join(data_dir, '%s_clean.npy' % idx) for idx in idcs]
 #        self.kagglenames = [f for f in self.filenames if len(f.split('/')[-1].split('_')[0])>20]
@@ -203,7 +209,7 @@ class DataBowl3Detector():
 
     def __len__(self):
         if self.phase == 'train':
-            return len(self.bboxes)/(1-self.r_rand)
+            return int(len(self.bboxes)/(1-self.r_rand))
         elif self.phase =='val':
             return len(self.bboxes)
         else:
@@ -485,5 +491,5 @@ def collate(batch):
 
 if __name__=="__main__":
     data_dir='/data/lungCT/luna/temp/luna_npy'
-    data=DataBowl3Detector(data_dir,config)
+    data=DataBowl3Detector(data_dir,config,phase='train')
     patch,label,coord=data.__getitem__(5)
