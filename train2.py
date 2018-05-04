@@ -120,4 +120,4 @@ model.fit_generator(generate_arrays(phase='train'),
 model_dir=SAVED_MODEL.split(SAVED_MODEL.split('/')[-1])[0]
 if not os.path.exists(model_dir):
     os.makedirs(model_dir)
-model.save(SAVED_MODEL)
+model.save(SAVED_MODEL,include_optimizer=False)
